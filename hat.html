@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jazz Hat Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body{
+            background-color: rgb(175, 213, 240);
+        }
+        .top{
+            justify-content: right;
+            padding: 10px 1rem;
+            background-color: aliceblue;
+            margin: 0px;
+            display: flex;
+            align-items: center;
+        }
+        .top div{
+            margin: 0.5rem;
+        }
+        .top div a {
+            text-decoration: none;
+            color: black;
+        }
+        .top input{
+            width: 100%;
+            height: 2rem;
+            border: 1px solid rgb(76, 73, 73);
+            border-radius: 10px;
+        }
+        .hide{
+            display: none;
+        }
+        .show{
+            display: inline-block;
+        }
+        #count{
+            position: relative;
+            top:-8px;
+            border: 2px solid red;
+            border-radius: 50%;
+            width: 1rem;
+            height: 1rem;
+            text-align: center;
+            font-weight: bold;
+            background-color: red;
+            color: white;
+            padding: 0.1rem;
+        }
+        #searchIcon{
+            position: relative;
+        }
+        .headercontainer{
+            display: flex;
+        }
+        .header{
+            display: inline-block;
+            margin: 1.5rem auto;
+            font-size: 3rem;
+            text-align: center;
+            padding: 1rem 0rem;
+            color:darkblue;
+            border-top: 0.5rem solid black;
+            border-bottom: 0.5rem solid black;
+            background: linear-gradient(135deg,blue,orange,green);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .hat{
+            width: 20%;
+            text-align: center;
+            margin: auto;
+            margin-bottom: 1rem;
+            background-color: white;
+            padding: 0.7rem;
+            box-shadow: 7px 7px 10px 7px rgb(141, 133, 133);
+            border-radius: 10px;
+        }
+        .hat:hover{
+            background-color: beige;
+        }
+        .hat img{
+            width: 80%;
+            height: auto;
+            margin-left: 10%;
+            border-radius: 50%;
+        }
+        .hat img:hover{
+            transform: scale(1.1);
+        }
+        .hat p{
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .hat button{
+            width: 60%;
+           padding :0.5rem 0rem;
+           border-radius: 10px;
+           /* background-image: linear-gradient(to right bottom, #e7f8c2, #f3e2b2, #f6cdaf, #edbcb2, #daaeb6); */
+           /* animation: chgColor 5s infinite alternate; */
+           animation-duration: 4s;
+           animation-name: chgColor;
+           animation-iteration-count: infinite;
+        }
+        @keyframes chgColor{
+            from{
+                background: linear-gradient(135deg,rgb(252, 235, 160),rgb(149, 215, 244));
+                /* color: black; */
+            }
+            to{
+                background: linear-gradient(135deg,rgb(149, 215, 244),rgb(252, 235, 160));
+                /* color: black; */
+            }
+        }
+        
+    </style>
+    <script>
+        let replaceIE=()=>{
+
+            let ie=document.createElement("input");
+            ie.type="text";
+            //search.appendChild(ie);
+            search.innerHTML="";
+            search.appendChild(ie);
+        }
+        let setIcon=()=>{
+            search.innerHTML='<i class="fa-solid fa-magnifying-glass" id="searchIcon" onmouseenter="replaceIE();"></i>';
+        }
+        let hideShow=()=>{
+            if(count.classList.contains("hide"))
+                count.classList.remove("hide");
+            if(!count.classList.contains("show"))
+                count.classList.add("show");
+        }
+        let addtocart=(btne)=>{
+            let parent=btne.parentNode;
+            let carr=parent.children;
+
+            let image=carr[0].src;
+            let name=carr[1].innerHTML;
+            let price=carr[2].innerHTML;
+            price=price.replace("Price :","");
+            let item={iimage:image,iname:name,iprice:price};
+            //alert(item.iimage+":"+item.iname+":"+item.iprice);
+            if (sessionStorage.getItem("items")==null)
+            {
+                let arr=[item];
+                let str=JSON.stringify(arr);
+                sessionStorage.setItem("items",str);
+                hideShow();
+                count.innerHTML=1;
+            }
+            else
+            {
+                let str=sessionStorage.getItem("items");
+                let arr=JSON.parse(str);
+                arr[arr.length]=item;
+                hideShow();
+                count.innerHTML=arr.length;
+                str=JSON.stringify(arr);
+                sessionStorage.setItem("items",str);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="top">
+        <div class="search" id="search" onmouseout="setIcon();">
+            <i class="fa-solid fa-magnifying-glass" id="searchIcon" onmouseenter="replaceIE();"></i>
+        </div>
+        <div>
+            <i class="fa-solid fa-cart-shopping"></i>
+            <label for="" id="count" class="hide">0</label>
+        </div>
+        <div>
+            <a href="confirm.html"><i class="fa-regular fa-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="headercontainer">
+        <h1 class="header">Jazz Hat Shop</h1>
+    </div>
+    <div class="container">
+        <div class="hat">
+            <img src="../images/hat1.jpg" alt="mona lisa hat">
+            <p>mona lisa hat</p>
+            <p>Price : 8500</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat2.jpg" alt="mona lisa hat">
+            <p>Ramblin Man hat</p>
+            <p>Price : 6000</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat3.jpg" alt="mona lisa hat">
+            <p>dear hat</p>
+            <p>Price : 7200</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat4.jpg" alt="mona lisa hat">
+            <p>The Great Indoors hat</p>
+            <p>Price : 11500</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat5.jpg" alt="mona lisa hat">
+            <p>Jean hat</p>
+            <p>Price : 8000</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat6.jpg" alt="mona lisa hat">
+            <p>Burrata hat</p>
+            <p>Price : 9000</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat7.jpg" alt="mona lisa hat">
+            <p>BaseBall Cap</p>
+            <p>Price : 10000</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat8.jpg" alt="mona lisa hat">
+            <p>Tree hat</p>
+            <p>Price : 6500</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+        <div class="hat">
+            <img src="../images/hat9.jpg" alt="mona lisa hat">
+            <p>Good Luck hat</p>
+            <p>Price : 7200</p>
+            <button onclick="addtocart(this);">Add to Cart</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+    <style>
+        .header{
+            text-align: center;
+            color: brown;
+            padding: 1rem;
+        }
+        table{
+            width:100% ;
+            table-layout: fixed;
+        }
+        td,th{
+            text-align: center;
+            border: 2px solid black;
+            padding: 0.5rem;
+        }
+        th{
+            font-size: 1.3rem;
+            background-color: rgb(175, 213, 240);
+        }
+        .itemImg{
+            width: 50%;
+            height: auto;
+        }
+        .delete{
+            color: red;
+        }
+        .continue{
+            text-decoration: none;
+            display: inline-block;
+            width: 80%;
+            padding: 10px 0px;
+            color: black;
+            background-color: rgb(175, 213, 240);
+        }
+    </style>
+    <script>
+        let showItems=()=>{
+            if(sessionStorage.getItem("items")!=null)
+            {
+                let str=sessionStorage.getItem("items");
+                let arr=JSON.parse(str);
+                
+                let value="<table>";
+                value+="<tr>";
+                value+="<th>No</th>";
+                value+="<th>Image</th>";
+                value+="<th>Name</th>";
+                value+="<th>Price</th>";
+                value+="<th>Qty</th>";
+                value+="<th>Total</th>";
+                value+="<th></th>";
+                value+="</tr>";
+
+                let no=1;
+                let total=0;
+                for(i=0;i<arr.length;i++)
+                {
+                    value+="<tr>";
+                    value+="<td>"+no+"</td>";
+                    no++;
+                    
+                    value+="<td><img src='"+arr[i].iimage+"' class='itemImg'></td>";
+                    value+="<td>"+arr[i].iname+"</td>";
+                    value+="<td>"+arr[i].iprice+"</td>";
+                    value+="<td><input type='number' value='1' min='1' onchange='calBalance(this);'></td>";
+                    value+="<td>"+arr[i].iprice+"</td>";
+                    value+="<td onclick='del(this);'> <button class='delete'><i class='fa-solid fa-trash'></i></td>";
+                    value+="</tr>";
+                    total+=parseInt(arr[i].iprice);
+                }
+                value+="<tr><td colspan='5'>Balance</td><td id='balance'>"+total+"</td><td><a href='continue.html'class='continue'>Continue</a></td></tr>"
+                value+="</table>"
+                ans.innerHTML=value;
+            }
+            else{
+                ans.innerHTML="<h1 style='color:red;text-align:center;'>No Item in your cart</h1>"
+            }
+        }
+        let calBalance=(qtye)=>{
+            let qty=parseInt(qtye.value);
+
+            let tre=qtye.parentNode.parentNode;
+            let carr=tre.children;
+            alert(carr.length);
+
+            let price=parseInt(carr[3].innerHTML);
+            let oldTotal=parseInt(carr[5].innerHTML);
+        
+            let total=price*qty;
+            carr[5].innerHTML=total;
+            let b=parseInt(balance.innerHTML);
+            b-=oldTotal;
+            b+=total;
+            balance.innerHTML=b;
+        }
+        let del=(deletd)=>{
+            let tre=deletd.parentNode;
+            let name=tre.children[2].innerHTML;
+            let jstr=sessionStorage.getItem("items");
+            let arr=JSON.parse(jstr);
+            let arr2=new Array();
+            let j=0;
+            for(i=0;i<arr.length;i++)
+            {
+                if(arr[i].iname!=name)
+                {
+                    arr2[j++]=arr[i];
+                }
+            }
+            jstr=JSON.stringify(arr2);
+            sessionStorage.setItem("items",jstr);
+
+            ans.innerHTML="";
+            showItems()
+        }
+    </script>
+</head>
+<body onload="showItems()">
+    <h1 class="header">Check Your Cart</h1>
+    <div id="ans">
+
+    </div>
+</body>
+</html>
